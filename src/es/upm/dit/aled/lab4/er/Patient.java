@@ -130,7 +130,20 @@ public class Patient extends Thread {
 	 * movement is animated by the GUI and the index is increased by one.
 	 */
 	private void advanceProtocol() {
-		// TODO
+		// protocol es una lista de Transfer(Area, time), siendo Area el área nueva A LA QUE SE MUEVE el paciente.
+		// Cada movimiento de un área a otra, modelado con Transfer, tiene un índice indexProtocol.
+		
+		// Primero obtengo la transferencia con índice indexProtocol
+		Transfer t = this.protocol.get(indexProtocol);
+		// Muevo al paciente al área que indica la transferencia con índice indexProtocol
+		Area areaAntigua = this.location;
+		Area areaNueva = t.getTo();
+		this.location = areaNueva;
+		// Imprimo info del paciente que acaba de ser transferido
+		System.out.println("El paciente " + this.number + " acaba de ser trasladado desde " + areaAntigua.getName() + " hasta " + areaNueva.getName());
+		EmergencyRoomGUI.getInstance().animateTransfer(this, t);
+		// Incremento indexProtocol
+		indexProtocol++;
 	}
 
 	/**
@@ -139,7 +152,13 @@ public class Patient extends Thread {
 	 * Area.
 	 */
 	private void attendedAtLocation() {
-		// TODO
+		try {
+			// TODO: confirmar que es sleep y no wait
+			sleep(this.location.getTime());
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+			// TODO: ver qué pongo aquí
+		}
 	}
 
 	/**
@@ -149,7 +168,15 @@ public class Patient extends Thread {
 	 */
 	@Override
 	public void run() {
-		// TODO
+		// TODO: ver por qué no funciona
+		this.attendedAtLocation();
+		while(indexProtocol < this.getProtocol().size()) {
+			this.advanceProtocol();
+			this.attendedAtLocation();
+		}
+		if(indexProtocol < this.getProtocol().size()) {
+			EmergencyRoomGUI.getInstance().removePatient(this);
+		}
 	}
 
 }
