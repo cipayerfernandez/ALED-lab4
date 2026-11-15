@@ -12,7 +12,7 @@ import java.util.Scanner;
 import es.upm.dit.aled.lab4.er.gui.Position2D;
 
 /**
- * Models a hospital ER. It is characterized by a colletion of patients and the
+ * Models a hospital ER. It is characterized by a collection of patients and the
  * areas that these patients will be treated in. Patients extends the class Thread.
  * 
  * @author rgarciacarmona
@@ -123,7 +123,8 @@ public class EmergencyRoom {
 	 * @param patient The Patient.
 	 */
 	public void admit(Patient patient) {
-		// TODO
+		// Este método solo hace que la thread Patient se empiece a ejecutar
+		patient.start();
 	}
 
 	/**
@@ -132,7 +133,12 @@ public class EmergencyRoom {
 	 * @param patient The Patient.
 	 */
 	public void waitForDischarge(Patient patient) {
-		// TODO
+		// join() espera a que la thread muera, es decir, que se acabe su protocolo
+		try {
+			patient.join();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
 	}
 
 }

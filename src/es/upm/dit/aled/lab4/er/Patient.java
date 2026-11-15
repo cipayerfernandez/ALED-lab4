@@ -152,12 +152,12 @@ public class Patient extends Thread {
 	 * Area.
 	 */
 	private void attendedAtLocation() {
+		// Podría poner this delante de sleep, location y notify pero no es necesario
 		try {
-			// TODO: confirmar que es sleep y no wait
-			sleep(this.location.getTime());
+			sleep(location.getTime());
 		} catch (InterruptedException e) {
-			e.printStackTrace();
-			// TODO: ver qué pongo aquí
+			// La otra opción es que se despierte a la thread
+			e.printStackTrace();	// Lo dejo para que imprima en consola qué problema ha habido
 		}
 	}
 
@@ -168,7 +168,6 @@ public class Patient extends Thread {
 	 */
 	@Override
 	public void run() {
-		// TODO: ver por qué no funciona
 		this.attendedAtLocation();
 		while(indexProtocol < this.getProtocol().size()) {
 			this.advanceProtocol();
